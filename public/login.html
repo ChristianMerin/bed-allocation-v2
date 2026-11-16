@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in · Ward & Beds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="login-body">
+  <svg class="sprite" width="0" height="0" aria-hidden="true">
+    <defs>
+      <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 6v13M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11.5" r="2"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></symbol>
+    </defs>
+  </svg>
+
+  <main class="login-wrap">
+    <section class="login-art" aria-hidden="true">
+      <div class="login-art-inner">
+        <div class="logo big"><svg><use href="#i-bed"/></svg></div>
+        <h2>Bed Allocation &amp;<br />Inpatient Ward Management</h2>
+        <p>Real-time bed board, admissions, transfers and room rates for the MediLink Hospital Management System.</p>
+        <ul class="login-points">
+          <li><span class="dot available"></span>Live bed availability per ward</li>
+          <li><span class="dot occupied"></span>Admit, transfer and discharge in seconds</li>
+          <li><span class="dot reserved"></span>Room rates and full audit trail</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <form class="login-card" id="login-form" novalidate>
+        <div class="login-brand">
+          <div class="logo"><svg><use href="#i-bed"/></svg></div>
+          <div><strong>Ward &amp; Beds</strong><span>MediLink HMS · IPD</span></div>
+        </div>
+        <h1>Sign in</h1>
+        <p class="muted">Use the account given to you by the administrator.</p>
+
+        <div class="login-error hidden" id="login-error" role="alert"><svg><use href="#i-alert"/></svg><span></span></div>
+
+        <label>Username
+          <span class="input-icon">
+            <svg><use href="#i-user"/></svg>
+            <input name="username" id="username" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus />
+          </span>
+        </label>
+        <label>Password
+          <span class="input-icon">
+            <svg><use href="#i-lock"/></svg>
+            <input name="password" id="password" type="password" autocomplete="current-password" required />
+            <button type="button" class="reveal" id="reveal" aria-label="Show password" title="Show password"><svg><use href="#i-eye"/></svg></button>
+          </span>
+        </label>
+
+        <button class="btn primary block" type="submit" id="login-btn">Sign in</button>
+        <p class="login-foot muted">Forgot your password? Ask an administrator to reset it.</p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/login.js"></script>
+</body>
+</html>

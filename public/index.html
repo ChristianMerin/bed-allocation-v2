@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bed Allocation & Inpatient Ward Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="booting">
+  <!-- SVG icon sprite -->
+  <svg class="sprite" width="0" height="0" aria-hidden="true">
+    <defs>
+      <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 6v13M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11.5" r="2"/></symbol>
+      <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM9 11h6M9 15h4"/></symbol>
+      <symbol id="i-door" viewBox="0 0 24 24"><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17M3 21h18"/><circle cx="14.5" cy="12" r="1"/></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></symbol>
+      <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M2 21h20M8 7h4M8 11h4M8 15h4"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></symbol>
+      <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><svg><use href="#i-bed"/></svg></div>
+        <div class="brand-text">
+          <strong>Ward &amp; Beds</strong>
+          <span>MediLink HMS · IPD</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Main">
+        <a class="nav-item" href="#board" data-tab="board"><svg><use href="#i-bed"/></svg><span>Bed Board</span></a>
+        <a class="nav-item" href="#admissions" data-tab="admissions"><svg><use href="#i-clipboard"/></svg><span>Admissions</span></a>
+        <a class="nav-item" href="#rooms" data-tab="rooms"><svg><use href="#i-door"/></svg><span>Rooms</span></a>
+        <a class="nav-item" href="#rates" data-tab="rates"><svg><use href="#i-tag"/></svg><span>Room Rates</span></a>
+        <a class="nav-item" href="#setup" data-tab="setup"><svg><use href="#i-building"/></svg><span>Wards</span></a>
+        <a class="nav-item admin-only" href="#users" data-tab="users"><svg><use href="#i-users"/></svg><span>Users</span></a>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <span class="avatar" id="user-avatar">··</span>
+          <div class="user-text"><b id="whoami">…</b><span><span class="role-badge" id="user-role"></span></span></div>
+        </div>
+        <button class="icon-btn" id="btn-settings" type="button" title="My account" aria-label="My account"><svg><use href="#i-sliders"/></svg></button>
+        <button class="icon-btn" id="btn-logout" type="button" title="Sign out" aria-label="Sign out"><svg><use href="#i-logout"/></svg></button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- BED BOARD -->
+      <section class="panel" id="tab-board">
+        <header class="page-head">
+          <div>
+            <h1>Bed Board</h1>
+            <p>Live view of every ward, room and bed</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn icon-only" id="btn-refresh" type="button" title="Refresh" aria-label="Refresh"><svg><use href="#i-refresh"/></svg></button>
+            <button class="btn primary" id="btn-admit" type="button"><svg><use href="#i-plus"/></svg>Admit patient</button>
+          </div>
+        </header>
+
+        <section class="kpis" id="stats" aria-live="polite">
+          <div class="kpi skeleton"></div><div class="kpi skeleton"></div><div class="kpi skeleton"></div><div class="kpi skeleton"></div><div class="kpi wide skeleton"></div>
+        </section>
+
+        <div class="filters card">
+          <div class="filter-row">
+            <label class="search">
+              <svg><use href="#i-search"/></svg>
+              <input id="f-search" type="search" placeholder="Search patient, bed or room…  ( / )" autocomplete="off" />
+            </label>
+            <div class="seg" id="f-cat-pills" role="group" aria-label="Room class"></div>
+          </div>
+          <div class="filter-row">
+            <div class="pills" id="f-ward-pills" role="group" aria-label="Ward"></div>
+          </div>
+          <div class="filter-row">
+            <div class="pills" id="f-status-pills" role="group" aria-label="Status"></div>
+          </div>
+        </div>
+
+        <div id="board-grid">
+          <div class="ward-card skeleton tall"></div>
+          <div class="ward-card skeleton tall"></div>
+        </div>
+      </section>
+
+      <!-- ADMISSIONS -->
+      <section class="panel hidden" id="tab-admissions">
+        <header class="page-head">
+          <div>
+            <h1>Admissions</h1>
+            <p>Current inpatients and discharge history</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn primary" id="btn-admit-2" type="button"><svg><use href="#i-plus"/></svg>Admit patient</button>
+          </div>
+        </header>
+        <div class="toolbar">
+          <div class="seg" id="a-status-seg" role="group" aria-label="Admission status">
+            <button type="button" data-v="admitted" class="on">Admitted</button>
+            <button type="button" data-v="discharged">Discharged</button>
+            <button type="button" data-v="">All</button>
+          </div>
+          <input type="hidden" id="a-status" value="admitted" />
+          <label class="search grow">
+            <svg><use href="#i-search"/></svg>
+            <input id="a-search" type="search" placeholder="Search name, patient ID or admission no." />
+          </label>
+        </div>
+        <div class="table-wrap card flush">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Patient</th><th>Admission</th><th>Bed / Ward</th><th>Class</th>
+                <th>Admitted</th><th class="num">Stay</th><th>Doctor</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="adm-body"></tbody>
+          </table>
+        </div>
+        <div class="pager" id="adm-pager"></div>
+      </section>
+
+      <!-- ROOMS -->
+      <section class="panel hidden" id="tab-rooms">
+        <header class="page-head">
+          <div>
+            <h1>Rooms</h1>
+            <p>Add rooms, add beds and set special prices</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn primary admin-only" id="btn-add-room" type="button"><svg><use href="#i-plus"/></svg>Add room</button>
+          </div>
+        </header>
+        <div class="toolbar">
+          <select id="r-ward"><option value="">All wards</option></select>
+          <select id="r-category">
+            <option value="">All room classes</option>
+            <option value="private">Private</option>
+            <option value="semi-private">Semi-Private</option>
+            <option value="ward">Ward</option>
+          </select>
+        </div>
+        <div id="rooms-list"></div>
+      </section>
+
+      <!-- ROOM RATES -->
+      <section class="panel hidden" id="tab-rates">
+        <header class="page-head">
+          <div>
+            <h1>Room Rates</h1>
+            <p>Price per day for each room class</p>
+          </div>
+        </header>
+        <div class="callout">
+          <svg><use href="#i-alert"/></svg>
+          <div>
+            The <b>hospital default</b> applies to every ward. A ward can have its <b>own rate</b> (highlighted).
+            New rooms get the rate shown here. <b>Click a price to change it.</b>
+            Patients already admitted keep the price they were admitted at.
+          </div>
+        </div>
+        <div class="card flush">
+          <div class="table-wrap"><table class="table rate-table" id="rate-table"></table></div>
+        </div>
+        <h2 class="section-h">Price change history</h2>
+        <div class="card flush">
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>When</th><th>What</th><th>Class</th><th class="num">Old</th><th class="num">New</th><th class="num">Beds updated</th><th>By</th><th>Note</th></tr></thead>
+              <tbody id="price-history"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- WARDS -->
+      <section class="panel hidden" id="tab-setup">
+        <header class="page-head">
+          <div>
+            <h1>Wards</h1>
+            <p>Specialty wards of the hospital</p>
+          </div>
+        </header>
+        <div class="grid-2">
+          <form class="card admin-only" id="form-ward">
+            <h3>Add ward</h3>
+            <div class="row">
+              <label>Code<input name="code" required maxlength="10" placeholder="e.g. ENT" /></label>
+              <label>Name<input name="name" required placeholder="e.g. ENT Ward" /></label>
+            </div>
+            <div class="row">
+              <label>Specialty<select name="type" id="ward-type"></select></label>
+              <label>Floor<input name="floor" placeholder="e.g. 4F" /></label>
+            </div>
+            <div class="row">
+              <label>Gender policy
+                <select name="genderPolicy">
+                  <option value="mixed">Mixed</option><option value="male">Male only</option><option value="female">Female only</option>
+                </select>
+              </label>
+              <label>Building<input name="building" placeholder="optional" /></label>
+            </div>
+            <div class="btn-row"><button class="btn primary" type="submit"><svg><use href="#i-plus"/></svg>Save ward</button></div>
+          </form>
+
+          <div class="card steps">
+            <h3>How the setup works</h3>
+            <ol>
+              <li><span>1</span><div><b>Wards</b> are specialties (Medical, Orthopedic, Pediatric…). Add them here.</div></li>
+              <li><span>2</span><div><b>Rooms</b> belong to a ward and have a class: Private (1 bed), Semi-Private (2 beds) or Ward (up to 12 beds). Add them in <a href="#rooms">Rooms</a>.</div></li>
+              <li><span>3</span><div><b>Prices</b> come from <a href="#rates">Room Rates</a>. Any single room can still get a special price.</div></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="card flush">
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Ward</th><th>Specialty</th><th>Floor</th><th>Gender</th><th class="num">Beds</th><th class="num">Occupied</th><th></th></tr></thead>
+              <tbody id="ward-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <!-- USERS (admin) -->
+      <section class="panel hidden" id="tab-users">
+        <header class="page-head">
+          <div>
+            <h1>Users</h1>
+            <p>Who can sign in to this system</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn primary" id="btn-add-user" type="button"><svg><use href="#i-plus"/></svg>Add user</button>
+          </div>
+        </header>
+        <div class="callout">
+          <svg><use href="#i-alert"/></svg>
+          <div>
+            <b>Admin</b>: everything, including wards, rooms, room rates and users.
+            <b>Staff</b> (nurses, admitting clerks): bed board, admit / transfer / discharge, bed status and reservations.
+            New users get a temporary password and must change it at first sign-in.
+          </div>
+        </div>
+        <div class="card flush">
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Status</th><th>Last sign-in</th><th></th></tr></thead>
+              <tbody id="user-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="modal">
+    <div class="modal-head">
+      <h2 id="modal-title"></h2>
+      <button class="icon-btn" id="modal-close" type="button" aria-label="Close"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div id="modal-body"></div>
+  </dialog>
+
+  <div id="toast" role="status"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
